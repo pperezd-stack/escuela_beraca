@@ -23,10 +23,9 @@ public class UsuarioController {
     }
 
     @GetMapping
-    public List<Usuario> obtenerUsuarios() {
-        return usuarioService.obtenerEstudiantes(); // <-- Llama al filtro nativo de SQL
-    }
-
+public List<Usuario> obtenerUsuarios() {
+    return usuarioService.obtenerTodos();
+}
     // GET ID
     @GetMapping("/{id}")
     public Usuario buscarUsuario(@PathVariable Long id) {
