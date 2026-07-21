@@ -21,8 +21,9 @@ public class AuthController {
 
         Usuario usuario =
                 usuarioService.login(
-                        datos.getNombre()
-                );
+        datos.getNombre(),
+        datos.getPassword()
+);
 
         if (usuario == null) {
 
