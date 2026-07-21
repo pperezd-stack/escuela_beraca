@@ -4,6 +4,8 @@ import com.beraca.model.Usuario;
 import org.springframework.web.bind.annotation.*;
 import com.beraca.Service.UsuarioService;
 import java.util.List;
+import com.beraca.dto.UsuarioResponse;
+import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("/usuarios")
@@ -22,9 +24,20 @@ public class UsuarioController {
         return usuarioService.guardar(usuario);
     }
 
-    @GetMapping
-public List<Usuario> obtenerUsuarios() {
-    return usuarioService.obtenerTodos();
+   @GetMapping
+public List<UsuarioResponse> obtenerUsuarios() {
+
+    return usuarioService.obtenerTodos()
+            .stream()
+            .map(usuario -> new UsuarioResponse(
+
+                    usuario.getId(),
+                    usuario.getNombre(),
+                    usuario.getRol()
+
+            ))
+            .collect(Collectors.toList());
+
 }
     // GET ID
     @GetMapping("/{id}")
