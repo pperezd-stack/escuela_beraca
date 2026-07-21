@@ -12,24 +12,32 @@ public class AuthController {
 
     private final UsuarioService usuarioService;
 
-    public AuthController(UsuarioService usuarioService){
+    public AuthController(UsuarioService usuarioService) {
         this.usuarioService = usuarioService;
     }
 
     @PostMapping("/login")
-    public ResponseEntity<?> login(@RequestBody Usuario datos){
+    public ResponseEntity<?> login(@RequestBody Usuario datos) {
 
         Usuario usuario =
                 usuarioService.login(
-                        datos.getCorreo(),
-                        datos.getPassword()
+                        datos.getNombre()
                 );
 
-        if(usuario == null){
+        if (usuario == null) {
 
             return ResponseEntity
                     .badRequest()
-                    .body("Correo o contraseña incorrectos");
+                    .body("Usuario no encontrado");
+
+        }
+
+        // Validar contraseña
+        if (!usuario.getPassword().equals(datos.getPassword())) {
+
+            return ResponseEntity
+                    .badRequest()
+                    .body("Contraseña incorrecta");
 
         }
 
