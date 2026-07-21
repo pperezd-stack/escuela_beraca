@@ -3,7 +3,6 @@ package com.beraca.Controller;
 import com.beraca.Service.UsuarioService;
 import com.beraca.dto.UsuarioDTO;
 import com.beraca.model.Usuario;
-
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
