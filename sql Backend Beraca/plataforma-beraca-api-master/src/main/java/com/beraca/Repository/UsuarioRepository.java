@@ -16,6 +16,6 @@ public interface UsuarioRepository extends JpaRepository<Usuario, Long> {
     List<Usuario> buscarSoloEstudiantes();
 
     // Buscar un usuario por su nombre
-    Optional<Usuario> findByNombre(String nombre);
+  Optional<Usuario> findByNombre(String nombre);
 
 }
