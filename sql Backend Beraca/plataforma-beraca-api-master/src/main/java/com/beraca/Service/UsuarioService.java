@@ -3,6 +3,7 @@ package com.beraca.Service;
 import com.beraca.Repository.UsuarioRepository;
 import com.beraca.model.Usuario;
 import org.springframework.stereotype.Service;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
 import java.util.List;
 
