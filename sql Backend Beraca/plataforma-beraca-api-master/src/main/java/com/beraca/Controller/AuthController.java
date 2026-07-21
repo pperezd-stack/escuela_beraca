@@ -1,9 +1,11 @@
 package com.beraca.Controller;
 
 import com.beraca.Service.UsuarioService;
-import com.beraca.model.Usuario;
-import org.springframework.web.bind.annotation.*;
 import com.beraca.dto.UsuarioDTO;
+import com.beraca.model.Usuario;
+
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/auth")
@@ -16,30 +18,30 @@ public class AuthController {
         this.usuarioService = usuarioService;
     }
 
-   @PostMapping("/login")
-public ResponseEntity<?> login(@RequestBody Usuario datos) {
+    @PostMapping("/login")
+    public ResponseEntity<?> login(@RequestBody Usuario datos) {
 
-    Usuario usuario = usuarioService.login(
-            datos.getNombre(),
-            datos.getPassword()
-    );
+        Usuario usuario = usuarioService.login(
+                datos.getNombre(),
+                datos.getPassword()
+        );
 
-    if (usuario == null) {
+        if (usuario == null) {
 
-        return ResponseEntity
-                .badRequest()
-                .body("Usuario o contraseña incorrectos");
+            return ResponseEntity
+                    .badRequest()
+                    .body("Usuario o contraseña incorrectos");
+
+        }
+
+        UsuarioDTO respuesta = new UsuarioDTO(
+                usuario.getId(),
+                usuario.getNombre(),
+                usuario.getRol()
+        );
+
+        return ResponseEntity.ok(respuesta);
 
     }
-
-    UsuarioDTO respuesta = new UsuarioDTO(
-        usuario.getId(),
-        usuario.getNombre(),
-        usuario.getRol()
-);
-
-    return ResponseEntity.ok(respuesta);
-
-}
 
 }
