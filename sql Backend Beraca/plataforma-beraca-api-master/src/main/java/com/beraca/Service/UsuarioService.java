@@ -2,98 +2,158 @@ package com.beraca.Service;
 
 import com.beraca.Repository.UsuarioRepository;
 import com.beraca.model.Usuario;
-import org.springframework.stereotype.Service;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.stereotype.Service;
 
 import java.util.List;
 
 @Service
 public class UsuarioService {
 
- private final UsuarioRepository usuarioRepository;
-private final BCryptPasswordEncoder passwordEncoder;
+    private final UsuarioRepository usuarioRepository;
+    private final BCryptPasswordEncoder passwordEncoder;
 
-   public UsuarioService( UsuarioRepository usuarioRepository,  BCryptPasswordEncoder passwordEncoder) {
+    public UsuarioService(
+            UsuarioRepository usuarioRepository,
+            BCryptPasswordEncoder passwordEncoder) {
 
-    this.usuarioRepository = usuarioRepository;
-    this.passwordEncoder = passwordEncoder;
+        this.usuarioRepository = usuarioRepository;
+        this.passwordEncoder = passwordEncoder;
+    }
 
-}
-
-    // POST - GUARDAR USUARIO
+    // ==========================
+    // REGISTRAR USUARIO
+    // ==========================
     public Usuario guardar(Usuario usuario) {
 
-    usuario.setPassword(
+        // Nombre obligatorio
+        if (usuario.getNombre() == null ||
+                usuario.getNombre().trim().isEmpty()) {
 
-            passwordEncoder.encode(
-                    usuario.getPassword()
-            )
+            throw new RuntimeException(
+                    "El nombre es obligatorio"
+            );
+        }
 
-    );
+        // Nombre repetido
+        if (existeNombre(usuario.getNombre())) {
 
-    return usuarioRepository.save(usuario);
+            throw new RuntimeException(
+                    "Ese nombre ya está registrado"
+            );
+        }
 
-}
+        // Contraseña obligatoria
+        if (usuario.getPassword() == null ||
+                usuario.getPassword().length() < 6) {
 
-    // GET - OBTENER TODOS LOS USUARIOS
+            throw new RuntimeException(
+                    "La contraseña debe tener mínimo 6 caracteres"
+            );
+        }
+
+        // Rol obligatorio
+        if (usuario.getRol() == null ||
+                usuario.getRol().trim().isEmpty()) {
+
+            throw new RuntimeException(
+                    "Debe seleccionar un rol"
+            );
+        }
+
+        // Cifrar contraseña
+        usuario.setPassword(
+                passwordEncoder.encode(
+                        usuario.getPassword()
+                )
+        );
+
+        return usuarioRepository.save(usuario);
+
+    }
+
+    // ==========================
+    // OBTENER TODOS
+    // ==========================
     public List<Usuario> obtenerTodos() {
+
         return usuarioRepository.findAll();
+
     }
 
-    // GET - OBTENER SOLO ESTUDIANTES
+    // ==========================
+    // OBTENER ESTUDIANTES
+    // ==========================
     public List<Usuario> obtenerEstudiantes() {
+
         return usuarioRepository.buscarSoloEstudiantes();
+
     }
 
-    // GET - BUSCAR POR ID
+    // ==========================
+    // BUSCAR POR ID
+    // ==========================
     public Usuario buscar(Long id) {
-        return usuarioRepository.findById(id).orElse(null);
+
+        return usuarioRepository
+                .findById(id)
+                .orElse(null);
+
     }
 
-    // DELETE
+    // ==========================
+    // ELIMINAR
+    // ==========================
     public boolean eliminar(Long id) {
 
         if (usuarioRepository.existsById(id)) {
 
             usuarioRepository.deleteById(id);
+
             return true;
 
         }
 
         return false;
+
     }
 
+    // ==========================
     // LOGIN
-   // LOGIN
-public Usuario login(String nombre, String password) {
+    // ==========================
+    public Usuario login(String nombre, String password) {
 
-    Usuario usuario = usuarioRepository
-            .findByNombre(nombre)
-            .orElse(null);
+        Usuario usuario = usuarioRepository
+                .findByNombre(nombre)
+                .orElse(null);
 
-    if (usuario == null) {
+        if (usuario == null) {
 
-        return null;
+            return null;
+
+        }
+
+        if (!passwordEncoder.matches(
+                password,
+                usuario.getPassword())) {
+
+            return null;
+
+        }
+
+        return usuario;
 
     }
 
-    if (!passwordEncoder.matches(
-            password,
-            usuario.getPassword())) {
+    // ==========================
+    // VALIDAR NOMBRE EXISTENTE
+    // ==========================
+    public boolean existeNombre(String nombre) {
 
-        return null;
+        return usuarioRepository
+                .findByNombre(nombre)
+                .isPresent();
 
     }
-
-    return usuario;
-
-}
- public boolean existeNombre(String nombre){
-
-    return usuarioRepository
-            .findByNombre(nombre)
-            .isPresent();
-
-}
 
 }
