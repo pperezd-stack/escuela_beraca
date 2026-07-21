@@ -40,11 +40,28 @@ public List<UsuarioResponse> obtenerUsuarios() {
 
 }
     // GET ID
-    @GetMapping("/{id}")
-    public Usuario buscarUsuario(@PathVariable Long id) {
-        return usuarioService.buscar(id);
+  @GetMapping("/{id}")
+public ResponseEntity<UsuarioResponse> buscarUsuario(@PathVariable Long id) {
+
+    Usuario usuario = usuarioService.buscar(id);
+
+    if (usuario == null) {
+
+        return ResponseEntity.notFound().build();
+
     }
 
+    UsuarioResponse respuesta = new UsuarioResponse(
+
+            usuario.getId(),
+            usuario.getNombre(),
+            usuario.getRol()
+
+    );
+
+    return ResponseEntity.ok(respuesta);
+
+}
     // DELETE
     @DeleteMapping("/{id}")
     public String eliminarUsuario(@PathVariable Long id) {
