@@ -11,9 +11,11 @@ import java.util.Optional;
 @Repository
 public interface UsuarioRepository extends JpaRepository<Usuario, Long> {
 
-    @Query(value = "SELECT * FROM usuarios WHERE UPPER(TRIM(rol))='ESTUDIANTE'", nativeQuery = true)
+    // Obtener únicamente los estudiantes
+    @Query(value = "SELECT * FROM usuarios WHERE UPPER(TRIM(rol)) = 'ESTUDIANTE'", nativeQuery = true)
     List<Usuario> buscarSoloEstudiantes();
 
-    Optional<Usuario> findByCorreo(String correo);
+    // Buscar un usuario por su nombre
+    Optional<Usuario> findByNombre(String nombre);
 
 }
