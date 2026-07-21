@@ -64,12 +64,29 @@ private final BCryptPasswordEncoder passwordEncoder;
     }
 
     // LOGIN
-    public Usuario login(String nombre) {
+   // LOGIN
+public Usuario login(String nombre, String password) {
 
-        return usuarioRepository
-                .findByNombre(nombre)
-                .orElse(null);
+    Usuario usuario = usuarioRepository
+            .findByNombre(nombre)
+            .orElse(null);
+
+    if (usuario == null) {
+
+        return null;
 
     }
+
+    if (!passwordEncoder.matches(
+            password,
+            usuario.getPassword())) {
+
+        return null;
+
+    }
+
+    return usuario;
+
+}
 
 }
