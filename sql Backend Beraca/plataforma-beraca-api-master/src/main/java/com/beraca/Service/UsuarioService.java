@@ -88,5 +88,12 @@ public Usuario login(String nombre, String password) {
     return usuario;
 
 }
+ public boolean existeNombre(String nombre){
+
+    return usuarioRepository
+            .findByNombre(nombre)
+            .isPresent();
+
+}
 
 }
