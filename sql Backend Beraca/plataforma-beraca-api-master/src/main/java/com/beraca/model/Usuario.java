@@ -10,9 +10,13 @@ public class Usuario {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    @Column(nullable = false, unique = true)
     private String nombre;
-    private String correo;
+
+    @Column(nullable = false)
     private String password;
+
+    @Column(nullable = false)
     private String rol;
 
     public Long getId() {
@@ -31,14 +35,6 @@ public class Usuario {
         this.nombre = nombre;
     }
 
-    public String getCorreo() {
-        return correo;
-    }
-
-    public void setCorreo(String correo) {
-        this.correo = correo;
-    }
-
     public String getPassword() {
         return password;
     }
@@ -54,4 +50,5 @@ public class Usuario {
     public void setRol(String rol) {
         this.rol = rol;
     }
+
 }
