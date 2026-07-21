@@ -2,9 +2,8 @@ package com.beraca.Controller;
 
 import com.beraca.Service.UsuarioService;
 import com.beraca.model.Usuario;
-import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import com.beraca.dto.LoginResponse;
+import com.beraca.dto.UsuarioDTO;
 
 @RestController
 @RequestMapping("/auth")
@@ -33,13 +32,11 @@ public ResponseEntity<?> login(@RequestBody Usuario datos) {
 
     }
 
-    LoginResponse respuesta = new LoginResponse(
-
-            usuario.getId(),
-            usuario.getNombre(),
-            usuario.getRol()
-
-    );
+    UsuarioDTO respuesta = new UsuarioDTO(
+        usuario.getId(),
+        usuario.getNombre(),
+        usuario.getRol()
+);
 
     return ResponseEntity.ok(respuesta);
 
