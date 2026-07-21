@@ -22,8 +22,18 @@ private final BCryptPasswordEncoder passwordEncoder;
 
     // POST - GUARDAR USUARIO
     public Usuario guardar(Usuario usuario) {
-        return usuarioRepository.save(usuario);
-    }
+
+    usuario.setPassword(
+
+            passwordEncoder.encode(
+                    usuario.getPassword()
+            )
+
+    );
+
+    return usuarioRepository.save(usuario);
+
+}
 
     // GET - OBTENER TODOS LOS USUARIOS
     public List<Usuario> obtenerTodos() {
