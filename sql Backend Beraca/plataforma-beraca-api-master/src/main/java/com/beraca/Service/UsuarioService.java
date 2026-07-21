@@ -43,4 +43,21 @@ public class UsuarioService {
         }
         return false;
     }
+public Usuario login(String correo, String password){
+
+    Usuario usuario =
+            usuarioRepository.findByCorreo(correo).orElse(null);
+
+    if(usuario == null){
+        return null;
+    }
+
+    if(!usuario.getPassword().equals(password)){
+        return null;
+    }
+
+    return usuario;
+
+}
+    
 }
