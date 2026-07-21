@@ -19,26 +19,16 @@ public class AuthController {
     @PostMapping("/login")
     public ResponseEntity<?> login(@RequestBody Usuario datos) {
 
-        Usuario usuario =
-                usuarioService.login(
-        datos.getNombre(),
-        datos.getPassword()
-);
+        Usuario usuario = usuarioService.login(
+                datos.getNombre(),
+                datos.getPassword()
+        );
 
         if (usuario == null) {
 
             return ResponseEntity
                     .badRequest()
-                    .body("Usuario no encontrado");
-
-        }
-
-        // Validar contraseña
-        if (!usuario.getPassword().equals(datos.getPassword())) {
-
-            return ResponseEntity
-                    .badRequest()
-                    .body("Contraseña incorrecta");
+                    .body("Usuario o contraseña incorrectos");
 
         }
 
