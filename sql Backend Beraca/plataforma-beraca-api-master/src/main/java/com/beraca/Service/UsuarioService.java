@@ -13,9 +13,12 @@ public class UsuarioService {
  private final UsuarioRepository usuarioRepository;
 private final BCryptPasswordEncoder passwordEncoder;
 
-    public UsuarioService(UsuarioRepository usuarioRepository) {
-        this.usuarioRepository = usuarioRepository;
-    }
+   public UsuarioService( UsuarioRepository usuarioRepository,  BCryptPasswordEncoder passwordEncoder) {
+
+    this.usuarioRepository = usuarioRepository;
+    this.passwordEncoder = passwordEncoder;
+
+}
 
     // POST - GUARDAR USUARIO
     public Usuario guardar(Usuario usuario) {
