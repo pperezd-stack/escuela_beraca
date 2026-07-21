@@ -20,44 +20,41 @@ public class UsuarioService {
         return usuarioRepository.save(usuario);
     }
 
-    // GET - OBTENER TODOS LOS USUARIOS (SIN FILTRAR)
+    // GET - OBTENER TODOS LOS USUARIOS
     public List<Usuario> obtenerTodos() {
         return usuarioRepository.findAll();
     }
 
-    // GET - OBTENER SOLO ESTUDIANTES DESDE LA BASE DE DATOS
+    // GET - OBTENER SOLO ESTUDIANTES
     public List<Usuario> obtenerEstudiantes() {
         return usuarioRepository.buscarSoloEstudiantes();
     }
 
-    // GET ID - BUSCAR POR ID
+    // GET - BUSCAR POR ID
     public Usuario buscar(Long id) {
         return usuarioRepository.findById(id).orElse(null);
     }
 
-    // DELETE - ELIMINAR USUARIO
+    // DELETE
     public boolean eliminar(Long id) {
+
         if (usuarioRepository.existsById(id)) {
+
             usuarioRepository.deleteById(id);
             return true;
+
         }
+
         return false;
     }
-public Usuario login(String correo, String password){
 
-    Usuario usuario =
-            usuarioRepository.findByCorreo(correo).orElse(null);
+    // LOGIN
+    public Usuario login(String nombre) {
 
-    if(usuario == null){
-        return null;
+        return usuarioRepository
+                .findByNombre(nombre)
+                .orElse(null);
+
     }
 
-    if(!usuario.getPassword().equals(password)){
-        return null;
-    }
-
-    return usuario;
-
-}
-    
 }
