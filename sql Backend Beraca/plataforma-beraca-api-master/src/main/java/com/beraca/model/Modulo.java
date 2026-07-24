@@ -13,6 +13,11 @@ public class Modulo {
     private String nombre;
     private String orden;
 
+    // 🟢 Agregamos la relación OneToOne con el profesor
+    @OneToOne
+    @JoinColumn(name = "profesor_id", referencedColumnName = "id", unique = true)
+    private Usuario profesor;
+
     public Long getId() {
         return id;
     }
@@ -35,5 +40,13 @@ public class Modulo {
 
     public void setOrden(String orden) {
         this.orden = orden;
+    }
+
+    public Usuario getProfesor() {
+        return profesor;
+    }
+
+    public void setProfesor(Usuario profesor) {
+        this.profesor = profesor;
     }
 }
