@@ -18,7 +18,6 @@ public class UsuarioService {
     private final ModuloRepository moduloRepository;
     private final BCryptPasswordEncoder passwordEncoder;
 
-    // Inyección de dependencias por constructor
     public UsuarioService(
             UsuarioRepository usuarioRepository,
             ModuloRepository moduloRepository,
@@ -63,15 +62,10 @@ public class UsuarioService {
             throw new IllegalArgumentException("El módulo '" + modulo.getNombre() + "' ya tiene un profesor asignado.");
         }
 
-        // 6. Crear y configurar objeto Usuario
+        // 6. Crear objeto Usuario (Solo nombre, rol y contraseña cifrada)
         Usuario usuario = new Usuario();
         usuario.setNombre(dto.getNombre());
-        if (dto.getEmail() != null) {
-            usuario.setEmail(dto.getEmail());
-        }
         usuario.setRol("PROFESOR");
-
-        // Cifrar la contraseña
         usuario.setPassword(passwordEncoder.encode(dto.getPassword()));
 
         // Guardar el profesor en la base de datos
@@ -89,27 +83,22 @@ public class UsuarioService {
     // ==========================
     public Usuario guardar(Usuario usuario) {
 
-        // Nombre obligatorio
         if (usuario.getNombre() == null || usuario.getNombre().trim().isEmpty()) {
             throw new RuntimeException("El nombre es obligatorio");
         }
 
-        // Nombre repetido
         if (existeNombre(usuario.getNombre())) {
             throw new RuntimeException("Ese nombre ya está registrado");
         }
 
-        // Contraseña obligatoria
         if (usuario.getPassword() == null || usuario.getPassword().length() < 6) {
             throw new RuntimeException("La contraseña debe tener mínimo 6 caracteres");
         }
 
-        // Rol obligatorio
         if (usuario.getRol() == null || usuario.getRol().trim().isEmpty()) {
             throw new RuntimeException("Debe seleccionar un rol");
         }
 
-        // Cifrar contraseña
         usuario.setPassword(passwordEncoder.encode(usuario.getPassword()));
 
         return usuarioRepository.save(usuario);
@@ -172,3 +161,4 @@ public class UsuarioService {
         return usuarioRepository.findByNombre(nombre).isPresent();
     }
 }
+      
