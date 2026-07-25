@@ -48,7 +48,7 @@ public class SecurityConfig {
         CorsConfiguration configuration = new CorsConfiguration();
         
         // Permitir peticiones desde tu Frontend en desarrollo
-        configuration.setAllowedOrigins(List.of("http://localhost:5173", "https://escuela-beraca-1.onrender.com"));
+        configuration.setAllowedOrigins(List.of("http://localhost:5173", "https://frontend-para-vercel.vercel.app/"));
         
         // Permitir todos los métodos HTTP
         configuration.setAllowedMethods(List.of("GET", "POST", "PUT", "DELETE", "OPTIONS"));
