@@ -160,5 +160,10 @@ public class UsuarioService {
     public boolean existeNombre(String nombre) {
         return usuarioRepository.findByNombre(nombre).isPresent();
     }
+
+    public List<Usuario> obtenerEstudiantesPorModulo(String modulo) {
+    // Si manejas un campo 'rol' y un campo 'modulo' en tu entidad Usuario:
+    return usuarioRepository.findByRolAndModulo("ESTUDIANTE", modulo);
+}
 }
       
