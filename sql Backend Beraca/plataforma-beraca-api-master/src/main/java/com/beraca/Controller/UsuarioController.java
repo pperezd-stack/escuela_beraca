@@ -62,4 +62,15 @@ public class UsuarioController {
         }
         return "Usuario no encontrado";
     }
+    // OBTENER ESTUDIANTES FILTRADOS POR MÓDULO DEL PROFESOR
+    @GetMapping("/estudiantes-por-modulo")
+    public ResponseEntity<?> obtenerEstudiantesPorModulo(@RequestParam String modulo) {
+        try {
+            List<Usuario> estudiantes = usuarioService.obtenerEstudiantesPorModulo(modulo);
+            return ResponseEntity.ok(estudiantes);
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                    .body("Error al obtener los estudiantes del módulo: " + e.getMessage());
+        }
+    }
 }
