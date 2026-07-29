@@ -161,9 +161,19 @@ public class UsuarioService {
         return usuarioRepository.findByNombre(nombre).isPresent();
     }
 
-    public List<Usuario> obtenerEstudiantesPorModulo(String modulo) {
-    // Si manejas un campo 'rol' y un campo 'modulo' en tu entidad Usuario:
-    return usuarioRepository.findByRolAndModulo("ESTUDIANTE", modulo);
-}
+    // ==========================
+    // OBTENER ESTUDIANTES POR MÓDULO (BLINDADO)
+    // ==========================
+    public List<Usuario> obtenerEstudiantesPorModulo(String moduloParam) {
+        if (moduloParam == null || moduloParam.trim().isEmpty()) {
+            throw new IllegalArgumentException("El módulo no puede estar vacío");
+        }
+
+        // Limpieza de seguridad: si llega con formato "10:1", extrae únicamente la primera parte ("10")
+        String moduloLimpio = moduloParam.split(":")[0].trim();
+
+        // Realiza la consulta adaptada a tu repositorio
+        return usuarioRepository.findByRolAndModulo("ESTUDIANTE", moduloLimpio);
+    }
 }
       
