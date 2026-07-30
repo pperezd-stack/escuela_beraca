@@ -22,9 +22,9 @@ public interface UsuarioRepository extends JpaRepository<Usuario, Long> {
     // Obtener estudiantes de un módulo específico, filtrando también por rol
     @Query(value = """
         SELECT u.* FROM usuarios u
-        JOIN modulos_estudiante me ON me.estudiante_id = u.id
+        JOIN estudiante_modulo em ON em.estudiante_id = u.id
         WHERE UPPER(TRIM(u.rol)) = UPPER(:rol)
-        AND me.modulo_id = CAST(:moduloId AS bigint)
+        AND em.modulo_id = CAST(:moduloId AS bigint)
         """, nativeQuery = true)
     List<Usuario> findByRolAndModulo(@Param("rol") String rol, @Param("moduloId") String moduloId);
 }
