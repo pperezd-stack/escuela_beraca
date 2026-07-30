@@ -24,33 +24,33 @@ public class SecurityConfig {
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http
-            // 1. Deshabilitar CSRF (común y necesario para APIs REST stateless)
+            // 1. Deshabilitar CSRF (necesario para APIs REST stateless)
             .csrf(csrf -> csrf.disable())
 
-            // 2. Habilitar la configuración de CORS que definimos abajo
+            // 2. Habilitar la configuración de CORS
             .cors(cors -> cors.configurationSource(corsConfigurationSource()))
 
-            // 3. Configurar permisos de rutas
+            // 3. Configurar permisos de rutas (permitir todo temporalmente o ajustar endpoints)
             .authorizeHttpRequests(auth -> auth
-                // Permitir peticiones públicas a los endpoints de registro/autenticación
-                .requestMatchers("/api/**", "/usuarios/**", "/login/**").permitAll()
-                // Si quieres permitir TODO temporalmente para desarrollo, usa:
-                // .anyRequest().permitAll()
+                .requestMatchers("/api/**", "/usuarios/**", "/login/**", "/crear-estudiante").permitAll()
                 .anyRequest().permitAll() 
             );
 
         return http.build();
     }
 
-    // Configuración explícita de CORS para permitir tu frontend en Vite (localhost:5173)
+    // Configuración explícita de CORS corregida (sin la barra diagonal al final en Vercel)
     @Bean
     public CorsConfigurationSource corsConfigurationSource() {
         CorsConfiguration configuration = new CorsConfiguration();
         
-        // Permitir peticiones desde tu Frontend en desarrollo
-        configuration.setAllowedOrigins(List.of("http://localhost:5173", "https://frontend-para-vercel.vercel.app/"));
+        // Dominios permitidos (Nota: Se eliminó el "/" al final de la URL de Vercel)
+        configuration.setAllowedOrigins(List.of(
+            "http://localhost:5173", 
+            "https://frontend-para-vercel.vercel.app"
+        ));
         
-        // Permitir todos los métodos HTTP
+        // Permitir todos los métodos HTTP comunes
         configuration.setAllowedMethods(List.of("GET", "POST", "PUT", "DELETE", "OPTIONS"));
         
         // Permitir todos los encabezados (headers)
