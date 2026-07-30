@@ -3,6 +3,7 @@ package com.beraca.Repository;
 import com.beraca.model.Usuario;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
@@ -16,6 +17,14 @@ public interface UsuarioRepository extends JpaRepository<Usuario, Long> {
     List<Usuario> buscarSoloEstudiantes();
 
     // Buscar un usuario por su nombre
-  Optional<Usuario> findByNombre(String nombre);
+    Optional<Usuario> findByNombre(String nombre);
 
+    // Obtener estudiantes de un módulo específico, filtrando también por rol
+    @Query(value = """
+        SELECT u.* FROM usuarios u
+        JOIN modulos_estudiante me ON me.estudiante_id = u.id
+        WHERE UPPER(TRIM(u.rol)) = UPPER(:rol)
+        AND me.modulo_id = CAST(:moduloId AS bigint)
+        """, nativeQuery = true)
+    List<Usuario> findByRolAndModulo(@Param("rol") String rol, @Param("moduloId") String moduloId);
 }
