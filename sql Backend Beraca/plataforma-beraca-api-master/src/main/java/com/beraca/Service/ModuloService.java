@@ -5,6 +5,7 @@ import com.beraca.model.Modulo;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 public class ModuloService {
@@ -20,9 +21,19 @@ public class ModuloService {
         return moduloRepository.save(modulo);
     }
 
-    // GET
+    // GET - Devuelve los módulos únicos filtrados por nombre para evitar duplicados
     public List<Modulo> obtenerTodos() {
-        return moduloRepository.findAll();
+        List<Modulo> todos = moduloRepository.findAll();
+        
+        return todos.stream()
+                .collect(Collectors.toMap(
+                    Modulo::getNombre, 
+                    modulo -> modulo, 
+                    (existing, replacement) -> existing
+                ))
+                .values()
+                .stream()
+                .toList();
     }
 
     // GET ID
@@ -32,14 +43,11 @@ public class ModuloService {
 
     // DELETE
     public boolean eliminar(Long id) {
-
         if (moduloRepository.existsById(id)) {
             moduloRepository.deleteById(id);
             return true;
         }
-
         return false;
     }
 }
-
 
