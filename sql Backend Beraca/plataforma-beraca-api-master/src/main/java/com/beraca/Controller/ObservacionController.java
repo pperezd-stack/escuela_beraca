@@ -6,6 +6,8 @@ import com.beraca.model.Usuario;
 import com.beraca.Security.SecurityObservacion;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
 @RestController
 @RequestMapping("/observaciones")
 @CrossOrigin(origins = "*")
@@ -28,17 +30,26 @@ public class ObservacionController {
         return observacionService.obtenerTodos();
     }
 
+    // 🟢 NUEVO ENDPOINT: Buscar observación específica por estudiante y módulo
+    @GetMapping("/estudiante/{estudianteId}/modulo/{moduloId}")
+    public Object obtenerObservacionPorEstudianteYModulo(@PathVariable Long estudianteId, @PathVariable Long moduloId) {
+        List<Observacion> todas = observacionService.obtenerTodos();
+        return todas.stream()
+                .filter(o -> o.getEstudianteId() != null && o.getEstudianteId().equals(estudianteId) 
+                          && o.getModuloId() != null && o.getModuloId().equals(moduloId))
+                .findFirst()
+                .orElse(null);
+    }
+
     @PostMapping("/crear")
     public Object crearObservacion(@RequestBody Observacion observacion, @RequestParam String rol) {
         Usuario usuario = new Usuario();
         usuario.setRol(rol);
 
-        // Validamos permisos
         if (!SecurityObservacion.puedeCrearObservacion(usuario)) {
             return "Acceso denegado";
         }
 
-        // Esta validación ahora debe verificar los 3 cortes en SecurityObservacion
         if (!SecurityObservacion.observacionValida(observacion)) {
             return "Datos inválidos: Asegúrese de enviar los comentarios de los cortes";
         }
@@ -55,7 +66,6 @@ public class ObservacionController {
             return "Acceso denegado";
         }
 
-        // Al igual que crear, el objeto 'observacion' ya trae los 3 campos gracias a Spring
         return observacionService.guardar(observacion);
     }
 
