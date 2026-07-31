@@ -30,13 +30,13 @@ public class ObservacionController {
         return observacionService.obtenerTodos();
     }
 
-    // 🟢 NUEVO ENDPOINT: Buscar observación específica por estudiante y módulo
+    // Endpoint para buscar la observación específica por estudiante y módulo
     @GetMapping("/estudiante/{estudianteId}/modulo/{moduloId}")
     public Object obtenerObservacionPorEstudianteYModulo(@PathVariable Long estudianteId, @PathVariable Long moduloId) {
         List<Observacion> todas = observacionService.obtenerTodos();
         return todas.stream()
-                .filter(o -> o.getEstudianteId() != null && o.getEstudianteId().equals(estudianteId) 
-                          && o.getModuloId() != null && o.getModuloId().equals(moduloId))
+                .filter(o -> o.getEstudiante_id() != null && o.getEstudiante_id().equals(estudianteId) 
+                          && o.getModulo_id() != null && o.getModulo_id().equals(moduloId))
                 .findFirst()
                 .orElse(null);
     }
