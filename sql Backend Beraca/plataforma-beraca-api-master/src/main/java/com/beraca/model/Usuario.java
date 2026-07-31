@@ -19,6 +19,11 @@ public class Usuario {
     @Column(nullable = false)
     private String rol;
 
+    // Campo temporal (no se guarda en la base de datos de usuarios, 
+    // pero viaja en el objeto hacia el frontend para llevar el ID del módulo)
+    @Transient
+    private Long moduloId;
+
     public Long getId() {
         return id;
     }
@@ -49,6 +54,14 @@ public class Usuario {
 
     public void setRol(String rol) {
         this.rol = rol;
+    }
+
+    public Long getModuloId() {
+        return moduloId;
+    }
+
+    public void setModuloId(Long moduloId) {
+        this.moduloId = moduloId;
     }
 
 }
