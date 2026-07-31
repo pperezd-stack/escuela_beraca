@@ -2,9 +2,11 @@ package com.beraca.Repository;
 
 import com.beraca.model.Usuario;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.Optional;
@@ -27,4 +29,10 @@ public interface UsuarioRepository extends JpaRepository<Usuario, Long> {
         AND em.modulo_id = CAST(:moduloId AS bigint)
         """, nativeQuery = true)
     List<Usuario> findByRolAndModulo(@Param("rol") String rol, @Param("moduloId") String moduloId);
+
+    // 🟢 NUEVO: Vincular estudiante con módulo en la tabla intermedia
+    @Modifying
+    @Transactional
+    @Query(value = "INSERT INTO estudiante_modulo (estudiante_id, modulo_id) VALUES (:estudianteId, :moduloId)", nativeQuery = true)
+    void vincularEstudianteAModulo(@Param("estudianteId") Long estudianteId, @Param("moduloId") Long moduloId);
 }
