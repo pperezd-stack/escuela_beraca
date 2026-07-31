@@ -16,6 +16,7 @@ public class Observacion {
     private String comentarioCorte1;
     private String comentarioCorte2;
     private String comentarioCorte3;
+    private String comentarioFinal; // 🟢 NUEVO: Campo para la observación de la nota final
     private String fecha;
 
     // Getters y Setters
@@ -36,6 +37,9 @@ public class Observacion {
 
     public String getComentarioCorte3() { return comentarioCorte3; }
     public void setComentarioCorte3(String comentarioCorte3) { this.comentarioCorte3 = comentarioCorte3; }
+
+    public String getComentarioFinal() { return comentarioFinal; }
+    public void setComentarioFinal(String comentarioFinal) { this.comentarioFinal = comentarioFinal; }
 
     public String getFecha() { return fecha; }
     public void setFecha(String fecha) { this.fecha = fecha; }
