@@ -35,6 +35,18 @@ public class UsuarioController {
         }
     }
 
+    // 🟢 NUEVO: CREAR ESTUDIANTE (Conecta directamente con la ruta /usuarios/crear-estudiante del frontend)
+    @PostMapping("/crear-estudiante")
+    public ResponseEntity<?> crearEstudiante(@RequestBody Usuario estudiante) {
+        try {
+            Usuario nuevoEstudiante = usuarioService.guardar(estudiante);
+            return new ResponseEntity<>(nuevoEstudiante, HttpStatus.CREATED);
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                    .body("Error al registrar el estudiante: " + e.getMessage());
+        }
+    }
+
     // CREAR USUARIO GENÉRICO (si lo usas para otros roles)
     @PostMapping("/crear")
     public Usuario crearUsuario(@RequestBody Usuario usuario) {
@@ -62,6 +74,7 @@ public class UsuarioController {
         }
         return "Usuario no encontrado";
     }
+
     // OBTENER ESTUDIANTES FILTRADOS POR MÓDULO DEL PROFESOR
     @GetMapping("/estudiantes-por-modulo")
     public ResponseEntity<?> obtenerEstudiantesPorModulo(@RequestParam String modulo) {
