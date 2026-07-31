@@ -19,7 +19,7 @@ public interface UsuarioRepository extends JpaRepository<Usuario, Long> {
     // Buscar un usuario por su nombre
     Optional<Usuario> findByNombre(String nombre);
 
-    // Obtener estudiantes de un módulo específico, filtrando también por rol
+    // Obtener estudiantes de un módulo específico (verificando el nombre real de tu tabla intermedia)
     @Query(value = """
         SELECT u.* FROM usuarios u
         JOIN estudiante_modulo em ON em.estudiante_id = u.id
