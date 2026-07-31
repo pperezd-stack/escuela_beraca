@@ -30,24 +30,24 @@ public class SecurityConfig {
             // 2. Habilitar la configuración de CORS
             .cors(cors -> cors.configurationSource(corsConfigurationSource()))
 
-            // 3. Configurar permisos de rutas (permitir todo temporalmente o ajustar endpoints)
+            // 3. Configurar permisos de rutas
             .authorizeHttpRequests(auth -> auth
-                .requestMatchers("/api/**", "/usuarios/**", "/login/**", "/crear-estudiante").permitAll()
+                .requestMatchers("/api/**", "/usuarios/**", "/login/**", "/crear-estudiante", "/modulos/**").permitAll()
                 .anyRequest().permitAll() 
             );
 
         return http.build();
     }
 
-    // Configuración explícita de CORS corregida (sin la barra diagonal al final en Vercel)
+    // Configuración explícita de CORS con tu dominio actual de Vercel
     @Bean
     public CorsConfigurationSource corsConfigurationSource() {
         CorsConfiguration configuration = new CorsConfiguration();
         
-        // Dominios permitidos (Nota: Se eliminó el "/" al final de la URL de Vercel)
+        // Dominios permitidos actualizados
         configuration.setAllowedOrigins(List.of(
             "http://localhost:5173", 
-            "https://frontend-para-vercel.vercel.app"
+            "https://escuela-beraca.vercel.app"
         ));
         
         // Permitir todos los métodos HTTP comunes
