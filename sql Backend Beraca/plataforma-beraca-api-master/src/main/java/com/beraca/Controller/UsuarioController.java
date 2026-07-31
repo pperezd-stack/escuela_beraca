@@ -1,6 +1,7 @@
 package com.beraca.Controller;
 
 import com.beraca.Service.UsuarioService;
+import com.beraca.dto.EstudianteRegistroDTO;
 import com.beraca.dto.ProfesorRegistroDTO;
 import com.beraca.model.Usuario;
 import org.springframework.http.HttpStatus;
@@ -35,12 +36,14 @@ public class UsuarioController {
         }
     }
 
-    // 🟢 NUEVO: CREAR ESTUDIANTE (Conecta directamente con la ruta /usuarios/crear-estudiante del frontend)
+    // 🟢 ACTUALIZADO: CREAR ESTUDIANTE CON MÓDULO ASOCIADO (Usa EstudianteRegistroDTO)
     @PostMapping("/crear-estudiante")
-    public ResponseEntity<?> crearEstudiante(@RequestBody Usuario estudiante) {
+    public ResponseEntity<?> crearEstudiante(@RequestBody EstudianteRegistroDTO dto) {
         try {
-            Usuario nuevoEstudiante = usuarioService.guardar(estudiante);
+            Usuario nuevoEstudiante = usuarioService.guardarEstudianteConModulo(dto);
             return new ResponseEntity<>(nuevoEstudiante, HttpStatus.CREATED);
+        } catch (IllegalArgumentException e) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
                     .body("Error al registrar el estudiante: " + e.getMessage());
