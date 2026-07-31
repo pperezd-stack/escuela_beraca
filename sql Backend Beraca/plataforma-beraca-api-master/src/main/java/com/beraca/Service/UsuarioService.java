@@ -193,6 +193,14 @@ public class UsuarioService {
             return null;
         }
 
+        // Si el usuario es un estudiante, recuperamos su módulo asociado de la tabla intermedia
+        if ("ESTUDIANTE".equalsIgnoreCase(usuario.getRol())) {
+            List<Modulo> modulosDelEstudiante = moduloRepository.findModulosByEstudianteId(usuario.getId());
+            if (modulosDelEstudiante != null && !modulosDelEstudiante.isEmpty()) {
+                usuario.setModuloId(modulosDelEstudiante.get(0).getId());
+            }
+        }
+
         return usuario;
     }
 
@@ -217,4 +225,4 @@ public class UsuarioService {
         // Realiza la consulta adaptada a tu repositorio con la tabla 'estudiante_modulo'
         return usuarioRepository.findByRolAndModulo("ESTUDIANTE", moduloLimpio);
     }
-} 
+}
