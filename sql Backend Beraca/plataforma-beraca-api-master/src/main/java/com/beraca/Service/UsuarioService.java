@@ -172,8 +172,7 @@ public class UsuarioService {
         // Limpieza de seguridad: si llega con formato "10:1", extrae únicamente la primera parte ("10")
         String moduloLimpio = moduloParam.split(":")[0].trim();
 
-        // Realiza la consulta adaptada a tu repositorio
+        // Realiza la consulta adaptada a tu repositorio con la tabla 'estudiante_modulo'
         return usuarioRepository.findByRolAndModulo("ESTUDIANTE", moduloLimpio);
     }
-}
-      
+}    
