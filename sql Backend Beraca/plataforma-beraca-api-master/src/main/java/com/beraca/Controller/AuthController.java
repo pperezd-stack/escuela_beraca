@@ -8,6 +8,8 @@ import com.beraca.model.Usuario;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
 @RestController
 @RequestMapping("/auth")
 @CrossOrigin(origins = "*")
@@ -34,11 +36,12 @@ public class AuthController {
                     .body("Usuario o contraseña incorrectos");
         }
 
-        // 🟢 Si el usuario es PROFESOR, buscamos el módulo que tiene asignado
+        // 🟢 Si el usuario es PROFESOR, buscamos el módulo que tiene asignado de forma segura
         Long moduloId = null;
         if ("PROFESOR".equalsIgnoreCase(usuario.getRol())) {
-            Modulo modulo = moduloRepository.findByProfesorId(usuario.getId()).orElse(null);
-            if (modulo != null) {
+            List<Modulo> modulos = moduloRepository.findByProfesorId(usuario.getId());
+            if (modulos != null && !modulos.isEmpty()) {
+                Modulo modulo = modulos.get(0);
                 moduloId = modulo.getId();
             }
         }
