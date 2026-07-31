@@ -2,6 +2,7 @@ package com.beraca.Service;
 
 import com.beraca.Repository.ModuloRepository;
 import com.beraca.Repository.UsuarioRepository;
+import com.beraca.dto.EstudianteRegistroDTO;
 import com.beraca.dto.ProfesorRegistroDTO;
 import com.beraca.model.Modulo;
 import com.beraca.model.Usuario;
@@ -76,6 +77,47 @@ public class UsuarioService {
         moduloRepository.save(modulo);
 
         return profesorGuardado;
+    }
+
+    // ==========================
+    // REGISTRAR ESTUDIANTE CON MÓDULO ASOCIADO
+    // ==========================
+    @Transactional
+    public Usuario guardarEstudianteConModulo(EstudianteRegistroDTO dto) {
+
+        // 1. Validaciones básicas
+        if (dto.getNombre() == null || dto.getNombre().trim().isEmpty()) {
+            throw new IllegalArgumentException("El nombre es obligatorio");
+        }
+
+        if (existeNombre(dto.getNombre())) {
+            throw new IllegalArgumentException("Ese nombre ya está registrado");
+        }
+
+        if (dto.getPassword() == null || dto.getPassword().length() < 6) {
+            throw new IllegalArgumentException("La contraseña debe tener mínimo 6 caracteres");
+        }
+
+        if (dto.getModuloId() == null) {
+            throw new IllegalArgumentException("Debe seleccionar un módulo para el estudiante.");
+        }
+
+        // 2. Verificar que el módulo exista
+        moduloRepository.findById(dto.getModuloId())
+                .orElseThrow(() -> new IllegalArgumentException("El módulo seleccionado no existe."));
+
+        // 3. Crear y guardar el usuario estudiante
+        Usuario usuario = new Usuario();
+        usuario.setNombre(dto.getNombre());
+        usuario.setRol("ESTUDIANTE");
+        usuario.setPassword(passwordEncoder.encode(dto.getPassword()));
+
+        Usuario estudianteGuardado = usuarioRepository.save(usuario);
+
+        // 4. Insertar la relación en la tabla intermedia 'estudiante_modulo'
+        usuarioRepository.vincularEstudianteAModulo(estudianteGuardado.getId(), dto.getModuloId());
+
+        return estudianteGuardado;
     }
 
     // ==========================
@@ -175,4 +217,4 @@ public class UsuarioService {
         // Realiza la consulta adaptada a tu repositorio con la tabla 'estudiante_modulo'
         return usuarioRepository.findByRolAndModulo("ESTUDIANTE", moduloLimpio);
     }
-}    
+} 
