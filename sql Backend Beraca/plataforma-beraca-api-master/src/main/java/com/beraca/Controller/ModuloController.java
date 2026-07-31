@@ -19,13 +19,21 @@ public class ModuloController {
         this.moduloRepository = moduloRepository;
     }
 
-    // GET - ahora sí trae los módulos reales de la base de datos
+    // GET - trae todos los módulos reales de la base de datos
     @GetMapping
     public List<Modulo> obtenerModulos() {
         return moduloRepository.findAll();
     }
 
-    // POST - ahora sí guarda el módulo en la base de datos
+    // GET BY ID - OBTENER UN MÓDULO POR SU ID (Nuevo método agregado)
+    @GetMapping("/{id}")
+    public Object obtenerModuloPorId(@PathVariable Long id) {
+        return moduloRepository.findById(id)
+                .map(modulo -> (Object) modulo)
+                .orElse("Módulo no encontrado");
+    }
+
+    // POST - guarda el módulo en la base de datos
     @PostMapping("/crear")
     public Object crearModulo(@RequestBody Modulo modulo) {
         if (!SecurityModulo.moduloValido(modulo)) {
