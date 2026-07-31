@@ -4,8 +4,6 @@ import com.beraca.Service.UsuarioService;
 import com.beraca.dto.EstudianteRegistroDTO;
 import com.beraca.dto.ProfesorRegistroDTO;
 import com.beraca.model.Usuario;
-import com.beraca.model.Modulo; // Asegúrate de importar tu modelo Modulo o DTO correspondiente
-import com.beraca.Service.ModuloService; // Asegúrate de tener tu servicio de módulos
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -17,26 +15,9 @@ import java.util.List;
 public class UsuarioController {
 
     private final UsuarioService usuarioService;
-    private final ModuloService moduloService; // Inyectado para listar los módulos
 
-    public UsuarioController(UsuarioService usuarioService, ModuloService moduloService) {
+    public UsuarioController(UsuarioService usuarioService) {
         this.usuarioService = usuarioService;
-        this.moduloService = moduloService;
-    }
-
-    /* ===================================================
-                        MÓDULOS
-    ====================================================*/
-
-    // ENDPOINT PARA LLENAR EL SELECT DE MÓDULOS EN EL REGISTRO
-    @GetMapping("/modulos")
-    public ResponseEntity<List<Modulo>> obtenerModulos() {
-        try {
-            List<Modulo> modulos = moduloService.obtenerTodos();
-            return ResponseEntity.ok(modulos);
-        } catch (Exception e) {
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(null);
-        }
     }
 
     /* ===================================================
