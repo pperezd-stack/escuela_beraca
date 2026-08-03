@@ -15,6 +15,7 @@ import java.util.List;
 @RequestMapping("/auth")
 @CrossOrigin(origins = "*")
 public class AuthController {
+    
 
     private final UsuarioService usuarioService;
     private final ModuloRepository moduloRepository;
